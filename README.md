@@ -57,7 +57,7 @@ home-network-scanner/
 └── README.md
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -101,12 +101,7 @@ npm start
 
 Frontend runs at: `http://localhost:3000` (proxied to backend)
 
-## 🔑 Default Credentials
 
-| Role | Username | Password |
-|------|----------|----------|
-| Admin | admin | admin123 |
-| User | user | user123 |
 
 ## 📡 API Overview
 
