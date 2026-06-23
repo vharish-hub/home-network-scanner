@@ -22,22 +22,24 @@ class BaseConfig:
     DEFAULT_SCAN_RANGE = '192.168.1.0/24'
 
 
+# Parse and clean DATABASE_URL for compatibility with SQLAlchemy 1.4+ (replace postgres:// with postgresql://)
+raw_db_url = os.environ.get('DATABASE_URL')
+if raw_db_url and raw_db_url.startswith("postgres://"):
+    database_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+else:
+    database_url = raw_db_url
+
+
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'sqlite:///' + os.path.join(basedir, '..', 'instance', 'scanner_dev.db')
-    )
+    SQLALCHEMY_DATABASE_URI = database_url or ('sqlite:///' + os.path.join(basedir, '..', 'instance', 'scanner_dev.db'))
 
 
 class ProductionConfig(BaseConfig):
     """Production configuration."""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'sqlite:///' + os.path.join(basedir, '..', 'instance', 'scanner.db')
-    )
+    SQLALCHEMY_DATABASE_URI = database_url or ('sqlite:///' + os.path.join(basedir, '..', 'instance', 'scanner.db'))
     JWT_COOKIE_SECURE = True
 
 
