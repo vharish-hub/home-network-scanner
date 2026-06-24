@@ -44,7 +44,11 @@ function ScanPage() {
             setScanning(false);
             setActiveScan(null);
             fetchScans();
-            toast.info(`Scan ${updated.status}!`);
+            if (updated.status === 'completed') {
+              toast.info('Scan completed!');
+            } else {
+              toast.error(`Scan failed: ${updated.error_message || 'Unknown error'}`);
+            }
           }
         } catch { /* continue polling */ }
       }, 3000);
@@ -136,7 +140,15 @@ function ScanPage() {
                     <td>{scan.total_hosts}</td>
                     <td>{scan.total_vulns}</td>
                     <td>{scan.risk_score?.toFixed(0) || '-'}</td>
-                    <td><span className={`status-badge status-${scan.status}`}>{scan.status}</span></td>
+                    <td>
+                      <span 
+                        className={`status-badge status-${scan.status}`}
+                        title={scan.status === 'failed' ? scan.error_message : undefined}
+                        style={scan.status === 'failed' ? { cursor: 'help' } : {}}
+                      >
+                        {scan.status}
+                      </span>
+                    </td>
                     <td><button className="icon-btn" onClick={() => deleteScan(scan.id)}><FiTrash2 size={14} /></button></td>
                   </tr>
                 ))}

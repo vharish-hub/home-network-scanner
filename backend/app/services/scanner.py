@@ -285,10 +285,10 @@ class NetworkScanner:
 
 def _nmap_discover_hosts(target_range):
     """Host discovery using nmap -sn (ping scan)."""
-    nm = nmap.PortScanner()
     try:
+        nm = nmap.PortScanner()
         nm.scan(hosts=target_range, arguments='-sn')
-    except nmap.PortScannerError as exc:
+    except (nmap.PortScannerError, Exception) as exc:
         logger.error("nmap host discovery failed: %s", exc)
         return _fallback_discover_hosts(target_range)
 
@@ -323,10 +323,10 @@ def _nmap_discover_hosts(target_range):
 
 def _nmap_scan_ports(host, ports):
     """Port scan using nmap -sT -sV."""
-    nm = nmap.PortScanner()
     try:
+        nm = nmap.PortScanner()
         nm.scan(host, ports=ports, arguments='-sT -sV')
-    except nmap.PortScannerError as exc:
+    except (nmap.PortScannerError, Exception) as exc:
         logger.error("nmap port scan failed for %s: %s", host, exc)
         return _fallback_scan_ports(host, ports)
 
